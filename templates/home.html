@@ -1,51 +1,52 @@
 <html>
 	<head>
 		<title>Visualizing Time and Tense</title>
-		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
 	</head>
 	<body>
-		<div class="input-form">
-			<form action="" method="GET">
-				<textarea id="story" name="story" rows="10" cols="150" placeholder="Enter the story">{% if story %}{{story}}{% endif %}</textarea><br>
-				<input type="submit" value="Analyze">
-			<!-- </form> -->
+		<div class="input-and-annotate" style="width: 99.5%;">
+			<div class="input-form" style="width: 73%; float: left;">
+				<form action="" method="GET">
+					<textarea id="story" name="story" rows=10 placeholder="Enter the story" style="width: 100%">{% if story %}{{story}}{% endif %}</textarea><br>
+					<input type="submit" value="Analyze">
+			</div>
+			<div class="annotation" style="overflow: hidden;">
+				<table>
+					<tr>
+						{% for tense, color in color_annotate %}
+							<td><p style="background-color: {{color}}">{{tense}}</p></td>
+							{% if loop.index0 % 3 == 0 %}
+								</tr><tr>
+							{% endif %}
+						{% endfor %}
+				</table>
+			</div>
 		</div>
-		<div class="output">
-			<!-- <form action="" method="GET"> -->
-				{% if analyzed %}
-	        		{% for word, isVerb, color, tense, voice in analyzed %}
-	        			{% if isVerb == False %}
-	        				{% if word.isalpha() %} {{word}}
-	        				{% else %}{{word}}
-	        				{% endif %}
-	        			{% else %} 
-	        			<button style="background-color:{{color}};outline: none;" name="detail-btn" value="{{tense}};{{voice}}">{{word}}</button>
-	        			{% endif %}
-	        		{% endfor %}
-	      		{% endif %}
-      		</form>
+		<div class="output-and-detail" style="width: 99.5%;">
+			<div class="output" style="width: 73%; float: left; margin-right: 5px">
+					{% if analyzed %}
+		        		{% for word, isVerb, color, tense, voice in analyzed %}
+		        			{% if isVerb %}
+			        			{% if isVerb == False %} {{word}}
+			        			{% else %} <button style="background-color:{{color}};outline: none;" name="detail-btn" value="{{tense}};{{voice}}">{{word}}</button>
+			        			{% endif %}
+			        		{% else %}{{word}}
+			        		{% endif %}
+		        		{% endfor %}
+		      		{% endif %}
+	      		</form>
+			</div>
+			<div class="detail" style="margin-top: 30px; overflow: hidden; border: 3px solid black">
+						{% with messages = get_flashed_messages() %}
+							{% if messages %}
+								<h3 style="text-align: center;">Detail</h3>
+						    	<ul class=flashes>
+							    	{% for message in messages %}
+							      		<li>{{ message }}</li>
+							    	{% endfor %}
+						    	</ul>
+						  	{% endif %}
+						{% endwith %}
 		</div>
-		<div style="border: 5px;" class="detail">
-			{% with messages = get_flashed_messages() %}
-				{% if messages %}
-			    	<ul class=flashes>
-				    	{% for message in messages %}
-				      		<li>{{ message }}</li>
-				    	{% endfor %}
-			    	</ul>
-			  	{% endif %}
-			{% endwith %}
 		</div>
-		<!--
-		<div class="detail-div">
-		{% if detail %}
-			{{detail}}
-		{% endif %}
-		</div>
-		<script>
-    		$(document).ready(function() {
-        		$("detail-div").load();
-    		});        
-    	</script> -->
 	</body>
 </html>
