@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Visualizing Time and Tense</title>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+	</head>
+	<body>
+		<div class="input-form">
+			<form action="" method="GET">
+				<textarea id="story" name="story" rows="10" cols="150" placeholder="Enter the story">{% if story %}{{story}}{% endif %}</textarea><br>
+				<input type="submit" value="Analyze">
+			<!-- </form> -->
+		</div>
+		<div class="output">
+			<!-- <form action="" method="GET"> -->
+				{% if analyzed %}
+	        		{% for word, isVerb, color, tense, voice in analyzed %}
+	        			{% if isVerb == False %}
+	        				{% if word.isalpha() %} {{word}}
+	        				{% else %}{{word}}
+	        				{% endif %}
+	        			{% else %} 
+	        			<button style="background-color:{{color}};outline: none;" name="detail-btn" value="{{tense}};{{voice}}">{{word}}</button>
+	        			{% endif %}
+	        		{% endfor %}
+	      		{% endif %}
+      		</form>
+		</div>
+		<div style="border: 5px;" class="detail">
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+			    	<ul class=flashes>
+				    	{% for message in messages %}
+				      		<li>{{ message }}</li>
+				    	{% endfor %}
+			    	</ul>
+			  	{% endif %}
+			{% endwith %}
+		</div>
+		<!--
+		<div class="detail-div">
+		{% if detail %}
+			{{detail}}
+		{% endif %}
+		</div>
+		<script>
+    		$(document).ready(function() {
+        		$("detail-div").load();
+    		});        
+    	</script> -->
+	</body>
+</html>
