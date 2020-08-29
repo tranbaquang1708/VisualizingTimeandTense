@@ -4,7 +4,7 @@ import nltk
 
 # App config.
 DEBUG = True
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 
@@ -107,7 +107,7 @@ def analyze_text(story):
     for p in paragraphs:
         token = nltk.word_tokenize(p)
         tagged = nltk.pos_tag(token)
-        # print(tagged)
+        print(tagged)
 
         button_tagged = []
         for word_tag in tagged:
@@ -129,8 +129,6 @@ def analyze_text(story):
 
 
 class Form(Form):
-    # story = TextField('Enter the story:', validators=[validators.required()])
-    
     @app.route("/", methods=['GET', 'POST'])
     def main():
         analyzed = None
