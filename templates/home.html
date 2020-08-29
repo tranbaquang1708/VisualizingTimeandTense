@@ -14,7 +14,7 @@
 					<tr>
 						{% for tense, color in color_annotate %}
 							<td><p style="background-color: {{color}}">{{tense}}</p></td>
-							{% if loop.index0 % 3 == 0 %}
+							{% if loop.index0 % 3 == 2 %}
 								</tr><tr>
 							{% endif %}
 						{% endfor %}
