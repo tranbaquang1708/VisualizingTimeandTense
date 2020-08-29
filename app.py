@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, request, Markup
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import nltk
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 # App config.
 DEBUG = True
