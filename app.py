@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, request, Markup
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import nltk
+nltk.download('punkt')
 
 # App config.
 DEBUG = True
@@ -144,7 +145,7 @@ class Form(Form):
             flash("Voice: " + detail[1])
             detail = None
 
-        return render_template('home.html',story = story, analyzed = analyzed, detail = detail)
+        return render_template('home.html',story = story, analyzed = analyzed)
 
 if __name__ == "__main__":
     app.run()
