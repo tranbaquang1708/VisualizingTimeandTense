@@ -29,7 +29,7 @@
 					{% if analyzed %}
 		        		{% for word, isVerb, color, tense, voice in analyzed %}
 		        			{% if isVerb %}
-			        			{% if isVerb == False %} {{word}}
+			        			{% if isVerb == False %}{{word}}
 			        			{% else %} <button style="background-color:{{color}};outline: none;" name="detail-btn" value="{{tense}};{{voice}}">{{word}}</button>
 			        			{% endif %}
 			        		{% else %}{{word}}

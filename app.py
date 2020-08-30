@@ -16,7 +16,7 @@ def tense2color(tense):
         return '#00B8FF'
 
     if tense == 'Past Progressive':
-        return '#0073FF'
+        return '#4097FF'
 
     if tense == 'Past Perfect Simple':
         return '#7684B8'
@@ -107,6 +107,12 @@ def findTense(analyzed_list, tagged):
 
     if past_simple == True:
         past_simple = False
+        if tagged[0][1] in ['VB', 'VBP']:
+            tense = 'Past Simple'
+            color_name = tense2color(tense)
+            voice = 'Active'
+            return [button_text[1:], True, color_name, tense, voice]
+
         if tagged[0][1] == 'VBG':
             tense = 'Past Progressive'
             color_name = tense2color(tense)
@@ -120,7 +126,6 @@ def findTense(analyzed_list, tagged):
             voice = "Passive"
             changeVoice(analyzed_list, voice)
             return [button_text[1:], True, color_name, tense, voice]
-
 
     if past_perfect == True:
         past_perfect = False
@@ -162,6 +167,13 @@ def findTense(analyzed_list, tagged):
             color_name = tense2color(tense)
             changeTense(analyzed_list, tense)
             voice = 'Active'
+            return [button_text[1:], True, color_name, tense, voice]
+
+        if len(tagged) > 1 and tagged[0][0] == "been" and tagged[1][1] == 'VBN':
+            tense = 'Present Perfect Simple'
+            color_name = tense2color(tense)
+            changeTense(analyzed_list, tense)
+            voice = 'Passive'
             return [button_text[1:], True, color_name, tense, voice]
 
     if future_simple == True:
@@ -210,7 +222,15 @@ def findTense(analyzed_list, tagged):
             tense = 'Future Perfect Simple'
             color_name = tense2color(tense)
             voice = 'Passive'
+            changeTense(analyzed_list, tense)
             changeVoice(analyzed_list, voice)
+            return [button_text[1:], True, color_name, tense, voice]
+
+        if tagged[0][1] == 'VBN':
+            tense = 'Future Perfect Simple'
+            color_name = tense2color(tense)
+            voice = 'Active'
+            changeTense(analyzed_list, tense)
             return [button_text[1:], True, color_name, tense, voice]
 
     if tagged[0][1] == 'VBN':
@@ -276,6 +296,12 @@ def findTense(analyzed_list, tagged):
                 color_name = tense2color(tense)
                 voice ='Active'
 
+            elif tagged[1][0] in ["not", "n't"]:
+                tense = 'Past Simple'
+                color_name = tense2color(tense)
+                voice ='Active'
+                past_simple = True
+
         elif tagged[0][0] == 'had' and tagged[1][1] == 'VBN':
             tense = 'Past Perfect Simple'
             color_name = tense2color(tense)
@@ -286,7 +312,7 @@ def findTense(analyzed_list, tagged):
                 tense = 'Present Simple'
                 color_name = tense2color(tense)
                 voice ='Active'
-            if tagged[0][1] in ['VBD', 'VBN']:
+            elif tagged[0][1] in ['VBD', 'VBN']:
                 tense = 'Past Simple'
                 color_name = tense2color(tense)
                 voice ='Active'
@@ -319,7 +345,7 @@ def findTense(analyzed_list, tagged):
                 voice ='Active'
 
             if tagged[1][0] == "have":
-                tense = 'Future Perfect Simple'
+                tense = 'Future Simple'
                 color_name = tense2color(tense)
                 voice = 'Active'
                 future_perfect = True
@@ -406,10 +432,16 @@ def findTense(analyzed_list, tagged):
                 voice = 'Active'
 
         elif tagged[0][0] in ["has", "Has", "have", "Have"]:
-            if tagged[1][0] == "been" and tagged[2][1] == 'VBG':
-                tense = 'Present Perfect Progressive'
-                color_name = tense2color(tense)
-                voice = 'Active'
+            if tagged[1][0] == "been":
+                if tagged[2][1] == 'VBG':
+                    tense = 'Present Perfect Progressive'
+                    color_name = tense2color(tense)
+                    voice = 'Active'
+
+                elif tagged[2][1] == 'VBN':
+                    tense = 'Present Perfect Simple'
+                    color_name = tense2color(tense)
+                    voice = 'Passive'
 
         elif tagged[0][0] in ["will", "Will"]:
             if tagged[1][0] == "be":
@@ -511,6 +543,13 @@ def analyze_text(story):
 
         button_tagged = []
         for word_tag in tagged:
+            word_tag = list(word_tag)
+            if word_tag[1] == 'NNP' :
+                if word_tag[0] in ["are", "Are"]:
+                    word_tag[1] = 'VBP'
+                elif word_tag[0] in ["did", "Did"]:
+                    word_tag[1] = 'VBD'
+
             if word_tag[1] in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'MD'] or word_tag[0] in ["not", "Not", "n't"]:
                 button_tagged.append(word_tag)
             else:
