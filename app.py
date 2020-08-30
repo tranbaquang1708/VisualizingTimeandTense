@@ -213,6 +213,12 @@ def findTense(analyzed_list, tagged):
             changeVoice(analyzed_list, voice)
             return [button_text[1:], True, color_name, tense, voice]
 
+    if tagged[0][1] == 'VBN':
+        if len(tagged) == 1:
+            return [tagged[0][0], False, None, None, None]
+        else:
+            return [tagged[0][0], False, None, None, None], findTense(analyzed_list, tagged[1:])
+
     # Identify tense
     tense = 'Unidentified'
     color_name = 'grey'
@@ -220,9 +226,7 @@ def findTense(analyzed_list, tagged):
     detail = []
     if len(tagged) == 1:
         if tagged[0][1] == 'VBN':
-            tense = 'Present Simple'
-            color_name = tense2color(tense)
-            voice = 'Active'
+            return [button_text[1:], False, None, None, None]
 
         elif tagged[0][1] == 'VBD':
             tense = 'Past Simple'
@@ -252,8 +256,7 @@ def findTense(analyzed_list, tagged):
             present_simple = True
 
         elif tagged[0][1] == 'VBG':
-            tense = 'Present Progressive'
-            voice ='Active'
+            return [button_text[1:], False, None, None, None]
 
         elif tagged[0][0] in ['will', "Will", "'ll"]:
             tense = "Future Simple"
@@ -262,15 +265,16 @@ def findTense(analyzed_list, tagged):
             future_simple = True
 
     elif len(tagged) == 2:
-        if tagged[0][0] in ['was', 'were', 'Was', 'Were'] and tagged[1][1] == 'VBN':
-            tense = 'Past Simple'
-            color_name = tense2color(tense)
-            voice ='Passive'
+        if tagged[0][0] in ['was', 'were', 'Was', 'Were']:
+            if tagged[1][1] == 'VBN':
+                tense = 'Past Simple'
+                color_name = tense2color(tense)
+                voice ='Passive'
 
-        if tagged[0][0] in ['was', 'were', 'Was', 'Were'] and tagged[1][1] == 'VBG':
-            tense = 'Past Progressive'
-            color_name = tense2color(tense)
-            voice ='Active'
+            elif tagged[1][1] == 'VBG':
+                tense = 'Past Progressive'
+                color_name = tense2color(tense)
+                voice ='Active'
 
         elif tagged[0][0] == 'had' and tagged[1][1] == 'VBN':
             tense = 'Past Perfect Simple'
@@ -348,7 +352,7 @@ def findTense(analyzed_list, tagged):
                     color_name = tense2color(tense)
                     voice = 'Active'
 
-            elif tagged[0][0] in ["could", "Could"]:
+            elif tagged[0][0] in ["could", "Could", "might", "Might"]:
                 tense = 'Past Simple'
                 color_name = tense2color(tense)
                 voice ='Active'
