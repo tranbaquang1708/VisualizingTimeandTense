@@ -6,7 +6,7 @@
 		<div class="input-and-annotate" style="width: 99.5%;">
 			<div class="input-form" style="width: 73%; float: left;">
 				<form action="" method="GET">
-					<textarea id="story" name="story" rows=10 placeholder="Enter the story" style="width: 100%">{% if story %}{{story}}{% endif %}</textarea><br>
+					<textarea id="story" name="story" rows=10 maxlength="3000" placeholder="Enter the story (max 3000 characters)" style="width: 100%">{% if story %}{{story}}{% endif %}</textarea><br>
 					<input type="submit" value="Analyze">
 			</div>
 			<div class="annotation" style="overflow: hidden;">
